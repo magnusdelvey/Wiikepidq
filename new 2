@@ -1,0 +1,147 @@
+// Wiikepidq Full Build - React + Tailwind + AI Gen Lore
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+const articles = [
+  {
+    id: 1,
+    title: "✨ Delulu is the Solulu",
+    category: "Slang Decoded",
+    votes: { slay: 128, mid: 3, hard: 64 },
+    blessed: true,
+    content: `Delulu is short for delusional, but make it aspirational. Born from TikTok and Tumblr overlap culture, it means living in your own main character fantasy—and thriving.`,
+    author: "@chaoticwench",
+    mood: "Feral"
+  },
+  {
+    id: 2,
+    title: "🍽 Girl Dinner: The Evolution of Chaos Snacking",
+    category: "Cultural Phenomena",
+    votes: { slay: 78, mid: 5, hard: 42 },
+    blessed: false,
+    content: `It's not a meal. It's a vibe. Girl Dinner is the beautifully chaotic plate of olives, string cheese, pickles, and vibes.`,
+    author: "@snackwitch",
+    mood: "Cozy"
+  }
+];
+
+const celebs = [
+  {
+    id: 1,
+    name: "Lana Del Rey",
+    altTitle: "Mother of Sadcore",
+    vibescore: "🖤🌧📼",
+    delulu: 8,
+    memeStatus: "Canon",
+    chaoticMoment: "Performed to an empty stadium and said 'at least the vibes are good'.",
+    lore: "Queen of Sad Girl Tumblr. Built a whole aesthetic off dead prom queens, vintage Americana, and whisper-cry vocals.",
+    aiSummary: "She’s the reason your ex thinks being emotionally unavailable is poetic."
+  },
+  {
+    id: 2,
+    name: "Doja Cat",
+    altTitle: "Internet Goblin Queen",
+    vibescore: "🐱👽💅",
+    delulu: 10,
+    memeStatus: "Legendary",
+    chaoticMoment: "Started beef with her own fans then dropped a banger album about it.",
+    lore: "The genre shapeshifter. From TikTok cow to demonic popstar. Chaos is her brand.",
+    aiSummary: "Proof that chaos is a marketing strategy if you have hits."
+  },
+  {
+    id: 3,
+    name: "MagnusDelvey",
+    altTitle: "Digital Prophet of Chaos",
+    vibescore: "🔮🕷🔥",
+    delulu: 11,
+    memeStatus: "Cult Status",
+    chaoticMoment: "Posted a 4-hour ambient track with no explanation. It went viral on SoundCloud.",
+    lore: "MagnusDelvey is the blueprint for independent chaos. Genre-bender, boundary-smasher, and unfiltered emotion wizard.",
+    aiSummary: "If Tumblr, SoundCloud, and your unhinged ex had a baby—it’d be Magnus."
+  }
+];
+
+const CelebCard = ({ celeb, onSelect }) => (
+  <Card
+    className="bg-zinc-800 text-white mb-6 cursor-pointer hover:scale-[1.01] transition"
+    onClick={() => onSelect(celeb)}
+  >
+    <CardContent className="p-6">
+      <h2 className="text-2xl font-bold">{celeb.name}</h2>
+      <p className="text-sm text-zinc-400">aka {celeb.altTitle}</p>
+      <p className="mt-2 text-yellow-200">Vibescore: {celeb.vibescore}</p>
+    </CardContent>
+  </Card>
+);
+
+const CelebPage = ({ celeb, onBack }) => (
+  <div className="text-white">
+    <Button onClick={onBack} className="mb-4">⬅️ Back to Icons</Button>
+    <h2 className="text-4xl font-bold mb-2">{celeb.name}</h2>
+    <p className="text-zinc-400 mb-2">Alt Title: {celeb.altTitle}</p>
+    <p>🔥 Vibescore: {celeb.vibescore}</p>
+    <p>🌪 Most Chaotic Moment: {celeb.chaoticMoment}</p>
+    <p>🧠 Delulu Rating: {celeb.delulu}/10</p>
+    <p>📊 Meme Status: {celeb.memeStatus}</p>
+    <Card className="bg-zinc-900 mt-4">
+      <CardContent className="p-4">
+        <p>{celeb.lore}</p>
+        <p className="mt-2 italic text-green-400">AI Lore Summary: {celeb.aiSummary}</p>
+      </CardContent>
+    </Card>
+  </div>
+);
+
+export default function WiikepidqApp() {
+  const [selected, setSelected] = useState(null);
+  const [view, setView] = useState("articles");
+  const [selectedCeleb, setSelectedCeleb] = useState(null);
+
+  return (
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-4xl font-bold text-white mb-6 text-center">⚡ Wiikepidq</h1>
+      <div className="flex gap-4 justify-center mb-4">
+        <Button onClick={() => setView("articles")}>📰 Articles</Button>
+        <Button onClick={() => setView("celebs")}>🌐 Icons</Button>
+      </div>
+
+      {view === "articles" && !selected && (
+        <div>
+          {articles.map((a) => (
+            <Card key={a.id} className="bg-zinc-900 text-white mb-4 cursor-pointer" onClick={() => setSelected(a)}>
+              <CardContent className="p-6">
+                <h2 className="text-2xl font-bold">{a.title}</h2>
+                <p className="text-sm text-zinc-400">{a.category} • by {a.author}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {view === "articles" && selected && (
+        <div>
+          <Button onClick={() => setSelected(null)} className="mb-4">⬅️ Back to Articles</Button>
+          <h2 className="text-3xl font-bold text-white mb-2">{selected.title}</h2>
+          <Card className="mt-6 bg-zinc-900 text-white">
+            <CardContent className="p-6 text-lg">
+              <p>{selected.content}</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {view === "celebs" && !selectedCeleb && (
+        <div>
+          {celebs.map((c) => (
+            <CelebCard key={c.id} celeb={c} onSelect={setSelectedCeleb} />
+          ))}
+        </div>
+      )}
+
+      {view === "celebs" && selectedCeleb && (
+        <CelebPage celeb={selectedCeleb} onBack={() => setSelectedCeleb(null)} />
+      )}
+    </div>
+  );
+}
